@@ -1,53 +1,52 @@
-// server.js
-import jsonServer from 'json-server';
+import express from 'express';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const server = jsonServer.create();
-const router = jsonServer.router(join(__dirname, 'db.json'));
-const middlewares = jsonServer.defaults({
-  static: join(__dirname, 'dist')
-});
-
-const app = server;
+const app = express();
 const httpServer = createServer(app);
 
-const PORT = process.env.PORT || 3001;
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS 
-  ? process.env.ALLOWED_ORIGINS.split(',') 
-  : ["http://localhost:5173", "http://localhost:3000"];
+// CORS setup
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGINS?.split(',') || ["http://localhost:5173"],
+  credentials: true
+}));
 
+// Production middleware
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'dist')));
+}
+
+// Socket.IO setup
 const io = new Server(httpServer, {
   cors: {
-    origin: ALLOWED_ORIGINS,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: process.env.ALLOWED_ORIGINS?.split(',') || ["http://localhost:5173"],
+    methods: ["GET", "POST"],
     credentials: true
-  },
-  cookie: {
-    name: "io",
-    httpOnly: true,
-    secure: NODE_ENV === 'production'
   }
 });
 
-// Rest of your server.js code remains the same...
-// Only adding production static serving
-if (NODE_ENV === 'production') {
-  server.use(express.static(join(__dirname, 'dist')));
-  server.get('*', (req, res) => {
-    res.sendFile(join(__dirname, 'dist', 'index.html'));
+// Your existing socket.io logic here...
+
+// Handle SPA routing in production
+if (process.env.NODE_ENV === 'production') {
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
   });
 }
 
+const PORT = process.env.PORT || 3001;
 httpServer.listen(PORT, () => {
-  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`);
+  console.log(`Server running on port ${PORT} in ${process.env.NODE_ENV} mode`);
 });
+
+export default app;
