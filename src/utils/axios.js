@@ -1,3 +1,4 @@
+// src/utils/axios.js
 import axios from 'axios';
 import store from '../store';
 import { logout } from '../store/authSlice';
@@ -11,6 +12,7 @@ const axiosInstance = axios.create({
   }
 });
 
+// Request interceptor with error handling
 axiosInstance.interceptors.request.use(
   (config) => {
     const state = store.getState();
@@ -28,6 +30,33 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Rest of your axios config remains the same...
+// Response interceptor with enhanced error handling
+axiosInstance.interceptors.response.use(
+  (response) => {
+    if (response.config.url.includes('/disasters')) {
+      store.dispatch(updateLastUpdate());
+    }
+    return response;
+  },
+  (error) => {
+    if (error.response?.status === 401) {
+      store.dispatch(logout());
+    }
+    
+    // Handle network errors
+    if (!error.response) {
+      console.error('Network error:', error);
+      // You could dispatch a UI action here to show a network error message
+    }
+    
+    // Handle rate limiting
+    if (error.response?.status === 429) {
+      console.error('Rate limit exceeded:', error);
+      // You could dispatch a UI action here to show a rate limit message
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;
