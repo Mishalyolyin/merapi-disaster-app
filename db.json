@@ -1,0 +1,121 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "stevenAdmin@gmail.com",
+      "password": "admin123",
+      "name": "Steven Admin",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "name": "Steven Bachtiar",
+      "email": "stevenbachtiar@gmail.com",
+      "password": "12345678",
+      "role": "user"
+    }
+  ],
+  "disasters": [
+    {
+      "id": 1,
+      "type": "Erupsi",
+      "location": "Gunung Merapi",
+      "date": "2024-01-08",
+      "description": "Peningkatan aktivitas vulkanik",
+      "status": "Waspada",
+      "evacuationPoints": [
+        {
+          "id": 1,
+          "name": "Pos Evakuasi Selo",
+          "capacity": 200,
+          "currentOccupancy": 45
+        },
+        {
+          "id": 2,
+          "name": "Pos Pengungsian Kinahrejo",
+          "capacity": 300,
+          "currentOccupancy": 120
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "Aktivitas Vulkanik",
+      "location": "Sektor Timur",
+      "date": "2024-01-09",
+      "description": "Peningkatan seismik dan gas vulkanik",
+      "status": "Siaga",
+      "evacuationPoints": [
+        {
+          "id": 3,
+          "name": "Posko Utama",
+          "capacity": 500,
+          "currentOccupancy": 234
+        }
+      ]
+    },
+    {
+      "type": "waw",
+      "location": "dsini",
+      "date": "2025-01-10",
+      "description": "gapapah sih",
+      "status": "Normal",
+      "evacuationPoints": [
+        {
+          "id": 1736514281539,
+          "name": "pos jadul",
+          "capacity": 200,
+          "currentOccupancy": 0
+        },
+        {
+          "id": 1736514282467,
+          "name": "posyandu",
+          "capacity": 20,
+          "currentOccupancy": 0
+        }
+      ],
+      "id": 3
+    }
+  ],
+  "activities": [
+    {
+      "id": 1,
+      "timestamp": "2024-01-09T22:43:08.000Z",
+      "type": "warning",
+      "message": "Peningkatan aktivitas seismik terdeteksi",
+      "location": "Sektor Utara"
+    },
+    {
+      "id": 2,
+      "timestamp": "2024-01-09T22:40:08.000Z",
+      "type": "info",
+      "message": "Update status gunung: Level II (Waspada)",
+      "location": "Pusat Pemantauan"
+    },
+    {
+      "id": 3,
+      "timestamp": "2024-01-09T22:35:08.000Z",
+      "type": "alert",
+      "message": "Pengungsian preventif dilaksanakan",
+      "location": "Desa Merapi Timur"
+    },
+    {
+      "id": 1736514304939,
+      "timestamp": "2025-01-10T13:05:04.939Z",
+      "type": "warning",
+      "message": "Bencana baru: waw di dsini",
+      "location": "dsini"
+    }
+  ],
+  "settings": {
+    "adminDashboard": {
+      "autoRefresh": true,
+      "refreshInterval": 30000,
+      "defaultView": "table",
+      "notifications": {
+        "sound": true,
+        "desktop": true
+      }
+    }
+  }
+}
